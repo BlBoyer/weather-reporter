@@ -1,0 +1,15 @@
+When geolocations are parseFloated or other functions are applied, the report doesn't generate, and somehow uses a cached version.
+
+The api call keeps executing.-dependencies are update and generate report
+--fix, used the isActive bool, since generateReport sets it. The ideal way is to use a useCallback to define the generateReport function; 
+--I believe this because the latlon is set after the bool is set and it isn't an async function, we could set the bool after, but when
+--there isn't a bool, use useCallback.
+--Actual problem is that the generateReport function is remade on every re-render, so it causes a new instance and hence, dependency change
+
+The parseFloat returns a number, but the .toFixed, and .toPrecision, convert the number to string.
+--fix, used Number() function
+
+The position is being set on update, so, it updates the latlon object after updating on generate report once
+-fixed by using the isActive bool to call new pos fix
+
+getting an older report every time

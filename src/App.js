@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import React from 'react';
+import { useState } from 'react';
+class AppCL extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            area: ['Write whatever you want:'],
+            text: 'Default text'
+        };
+        this.add = (elem) => {
+            let val = elem.target.value;
+            this.setState({text: val});
+        }
+        this.update = () => {
+            let val= [this.state.area, ' '+this.state.text];
+            this.setState({ area: val });
+        }
+    }
+    render() {
+        return (
+            <div id="app">
+                <p>{this.state.area}</p>
+                <input id="Xer" onChange={this.add} value={this.state.text} />
+                <button onClick={this.update}> Upload Text </button>
+            </div>
+        );
+    };
 }
-
-export default App;
+export default AppCL;
+/* if input onChange=true this.change to input value*/

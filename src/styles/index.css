@@ -1,0 +1,132 @@
+/*colors*/
+:root {
+    --rain: rgba(0,40,117,.9);
+    --cloud: rgba(45,45,45,.9);
+    --sun: rgba(205, 165, 0,.9);
+    --storm: rgba(22,11,89, .9);
+    --snow: rgba(255, 250, 250,.9);
+}
+/*classes*/
+.sun {
+    border: 20px ridge gold;
+    box-shadow: var(--sun) 0px 0px 12px 6px;
+}
+
+.rain {
+    border: 20px ridge cornflowerblue;
+    box-shadow: var(--rain) 0px 0px 12px 6px;
+}
+.cloud {
+    border: 20px ridge gray;
+    box-shadow: var(--cloud) 0px 0px 12px 6px;
+}
+.storm {
+    border: 20px ridge darkslateblue;
+    box-shadow: var(--storm) 0px 0px 12px 6px;
+}
+.snow {
+    border: 20px ridge snow;
+    box-shadow: var(--snow) 0px 0px 12px 6px;
+}
+.loading {
+    height: 50px;
+    width: 50px;
+    pointer-events: none;
+    align-self: center;
+    border: 20px ridge darkslateblue;
+    box-shadow: var(--storm) 0px 0px 12px 6px;
+}
+
+/*
+@media (prefers-reduced-motion: no-preference) {
+    .loading {
+        animation: logo-spin infinite .8s linear;
+    }
+}
+@keyframes logo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+*/
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+#template {
+    width: 50vw;
+    min-width:540px;
+    display: grid;
+    grid-template-columns: .9fr;
+    grid-template-rows: 10px auto auto auto auto 10px;
+    grid-template-areas: 
+        "."
+        "header"
+        "report"
+        "footer"
+        ".";
+    justify-content: center;
+    text-align: center;
+    background-color: gray;
+    background-size: cover;
+}
+/*use text-align:center; for aligning text as seen in template, this eliminatest the need to do it in each component*/
+#loading-div {
+    height:100vh;
+    width:100vw;
+    justify-content:center;
+}
+#header {
+    grid-area: header;
+    background-color: dimgray;
+    font-family: 'Bernard MT';
+    font-size: 2em;
+    color: snow;
+    border: dashed black;
+    border-width: 2px 5px;
+    border-radius: 20px / 60%;
+    box-shadow: rgba(0,0,0,.8) 0px 0px 20px 5px inset;
+}
+#report {
+    grid-area: report;
+    background-color: lightgray;
+    font-family: 'Segoe UI Emoji';
+    padding: 5px;
+    box-shadow: rgba(0,0,0,.8) 0px 0px 20px 5px inset;
+    border-radius: 30px / 8%;
+}
+#sidebar {
+    max-width:50%;
+    float:left;
+}
+#icon {
+    width: 150px;
+    height: 150px;
+    margin: 10px 10px;
+    border-radius: 60px / 40%;
+}
+#text-report {
+    max-width:50%;
+    float: right;
+    padding-right:20px;
+    text-align:left;
+}
+    #footer {
+    grid-area: footer;
+    box-shadow: rgba(0,0,0,.8) 0px 0px 20px 5px inset;
+    border-radius: 30px / 8%;
+    background-color: dodgerblue;
+    color: snow;
+    padding: 5px 15px 7px 15px;
+}
