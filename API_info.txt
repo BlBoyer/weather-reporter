@@ -1,6 +1,5 @@
 /*
  * :::::::::::::::::::::API INFORMATION
-
  "properties": {
     "@id": "https://api.weather.gov/points/46.832,-122.538",
     "@type": "wx:Point",

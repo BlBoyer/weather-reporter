@@ -7,11 +7,14 @@ import stormy from '../image_files/stormy.jpg';
 import cloudy from '../image_files/cloudy.jpg';
 import snowy from '../image_files/snowy.jpg';
 
-export default function Report({ weatherData, currentPosition, generator }) {
+export default function Report({ reportHeader, weatherData, currentPosition, generator, refresher }) {
     //change weather data based on onClick from get report
     //declarations
     const genReport = () => generator;
+    const refresh = () => refresher;
     let latlon = currentPosition;
+    let dateOfUpdate = new Date(reportHeader.updated).toLocaleString();
+    let dateOfReport = new Date(weatherData.startTime).toDateString();
     const conditionImages = {
         'rain': rainy,
         'sun': sunny,
@@ -22,13 +25,7 @@ export default function Report({ weatherData, currentPosition, generator }) {
     const [icon, setIcon] = useState({ 'loading': loading });
     let windArr = [];
 
-    /*Find all complete numbers in windSpeed string, or just map/reduce the string where index is Nan
-     * let knotWind = weather_data.windSpeed.slice(0, 1) * 0.86897624.toPrecision(1)
-       let windNums= weather_data.windSpeed.reduce((i)=>typeof(i)==number)
-       let windNums = weather_data.windSpeed.split(' ').filter((i) => parseInt(i)).join(' to ');
-    */
-    //THIS NEEDS TO RENDER AN ELEMENT WITH THE INFO REQUESTED INSTEAD, NOT USED AS A VALUE --but it still works
-
+    //convert mph to knots
     function convertSpeed(){
         if (weatherData.windSpeed) {
             let windNums = weatherData.windSpeed.split(' ').filter((i) => parseInt(i))
@@ -68,15 +65,20 @@ export default function Report({ weatherData, currentPosition, generator }) {
         <div id="report">
             <Sidebar icon={icon} />
             <div id="text-report">
-                <div><h2>{weatherData.name}</h2><img src={weatherData.icon} alt="Icon provided by weather.gov" align="right" width="50px" height="50px" /></div>
+                <div id="report-header"><h2>{weatherData.name}</h2><p>{dateOfReport}</p></div>
+            <div><img src={weatherData.icon} alt="Icon provided by weather.gov" align="right" width="50px" height="50px" />
                 <b><i>{weatherData.shortForecast}</i></b>
+            </div>
                 <p><b>Temperature</b>: {weatherData.temperature}&#186; Fahrenheit, {Math.round((weatherData.temperature - 32) / 1.8)}&#186; Celsius<br />
                     <b>Wind</b>: {'' + weatherData.windSpeed + ', ' + convertSpeed() + ' kts '}<b>{weatherData.windDirection}</b><br />
-                <b>Forecast</b>: {weatherData.detailedForecast}<br /><br /></p>
+                    <b>Forecast</b>: {weatherData.detailedForecast} <br /><br />
+                    Updated: {dateOfUpdate}</p>
             </div>
-            <div>
-                <p><b>Current position</b>:{' ' + latlon.lat + ', ' + latlon.lon}</p>
-                <input type="text" id="coord_input" size="40px" /><button onClick={genReport()}>Get Forecast</button>
+            <div id="positioning">
+                <p><b>Reporting Position</b>:{' ' + latlon.lat + ', ' + latlon.lon}</p>
+                <input type="text" id="coord_input" size="40px" />
+                <button onClick={genReport()}>Get Forecast</button>
+                <button onClick={refresh()}>Refresh Position</button>
             </div>
         </div>
     );

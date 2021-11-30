@@ -12,4 +12,19 @@ The parseFloat returns a number, but the .toFixed, and .toPrecision, convert the
 The position is being set on update, so, it updates the latlon object after updating on generate report once
 -fixed by using the isActive bool to call new pos fix
 
-getting an older report every time
+getting an older report every time, not sure why this was happening
+
+--fetch url has the end accent as part of string, but as console-logged it's OK
+
+Alert doesn't seem to be updating
+--zone is being passed down as undefined and set before the useeffect completes, therefore: no re-render
+--fixed
+
+old report issue, my current time is a day ahead for some reason reading the 30th instead of the 29th, 
+and so we're pulling the wrong data which may or may not exist on the api
+--maybe this is a current time zone error, this was time format difference between generated time and period time
+--I think we need to force generate a new report or wait for the right report to get out
+--fix: for now, we check the generted time and match the day, then loop through the periods, breaking the loop at the startTime
+
+my error handling isn't working, might need to make a dedicated function to process erros with my own error codes
+

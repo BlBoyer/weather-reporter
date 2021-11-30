@@ -36,7 +36,7 @@
     border: 20px ridge darkslateblue;
     box-shadow: var(--storm) 0px 0px 12px 6px;
 }
-
+/*elements*/
 /*
 @media (prefers-reduced-motion: no-preference) {
     .loading {
@@ -106,6 +106,28 @@ code {
     box-shadow: rgba(0,0,0,.8) 0px 0px 20px 5px inset;
     border-radius: 30px / 8%;
 }
+#text-report {
+    max-width: 50%;
+    float: right;
+    padding-right: 20px;
+    padding-left: 3px;
+    text-align: left;
+    border: 5px groove gray;
+    box-shadow: rgba(0,0,0,.8) 2px 2px 5px 5px;
+    border-radius: 20px / 7%;
+}
+#report-header {
+    display:flex;
+    align-items:center;
+}
+#report-header > p{
+    margin-left: 3px;
+    border: 1px solid black;
+    border-radius: 2px / 10%;
+
+}
+#positioning {
+}
 #sidebar {
     max-width:50%;
     float:left;
@@ -116,13 +138,7 @@ code {
     margin: 10px 10px;
     border-radius: 60px / 40%;
 }
-#text-report {
-    max-width:50%;
-    float: right;
-    padding-right:20px;
-    text-align:left;
-}
-    #footer {
+#footer {
     grid-area: footer;
     box-shadow: rgba(0,0,0,.8) 0px 0px 20px 5px inset;
     border-radius: 30px / 8%;
