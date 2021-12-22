@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Report from './components/Report';
 import Header from './components/Header';
 import Alerts from './components/Alerts';
+import InfoBar from './components/infobar';
 
 /*
  * :::::::::::::::::::::API INFORMATION
@@ -18,6 +19,7 @@ export default function App() {
     //const [latlon, setLatlon] = useState({ lat: 46.832, lon: -122.538 });
     const [latlon, setLatlon] = useState({});
     const [update, setUpdate] = useState(0);
+    const [intDelay, setIntDelay] = useState(7000);
     const [isActive, setIsActive] = useState(true);
     const Refresh = () => setIsActive(true);
     const generateReport = () => {
@@ -41,7 +43,7 @@ export default function App() {
             //console.log('update effect when active timer');
             interval = setInterval(() => {
                 setUpdate(update => update + 1);
-           }, 7000);
+            }, intDelay);
         } else if (!isActive && update !== 0) { //make a turn off condition based on code later
             //console.log('update effect when inactive timer');
             clearInterval(interval);
@@ -74,10 +76,19 @@ export default function App() {
                 let response = await fetch(reference).catch(err => {
                     console.log(err);
                     Refresh();
-                    return;
                 });
-                let result = await response.json();
-                if (result) {
+                let result = await response.json().catch(err => {
+                    console.log(err);
+                    Refresh();
+                });
+                if (result.status) {
+                    console.log(result.status + ' ' + result.detail);
+                    console.log('call other area if status == bad area');
+                    //reset update interval
+                    setIntDelay(7000);
+                }
+                else if (result) {
+                    setIntDelay(7000);
                     let forecastUrl = result.properties.forecast;
                     if (forecastUrl) {
                         setWeather_zone(result.properties.forecastZone);
@@ -120,14 +131,16 @@ export default function App() {
 
     //change latlon useEffect on click to get report, so onClick itself will set a boolean in it's function and update the latlon obj
     //at this point interval will be paused and timed updates should stop until reverted to myLocation
+    //add infoBar
 
     return (
+        <div>
+            <InfoBar />
         <div id="template">
-            <React.StrictMode>
                 <Header />
                 <Report reportHeader={report_data} weatherData={weather_data} currentPosition={latlon} generator={generateReport} refresher={Refresh} />
                 <Alerts zone={weather_zone} />
-            </React.StrictMode>
-        </div>
+            </div>
+            </div>
         );
 }

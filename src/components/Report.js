@@ -71,8 +71,8 @@ export default function Report({ reportHeader, weatherData, currentPosition, gen
             </div>
                 <p><b>Temperature</b>: {weatherData.temperature}&#186; Fahrenheit, {Math.round((weatherData.temperature - 32) / 1.8)}&#186; Celsius<br />
                     <b>Wind</b>: {'' + weatherData.windSpeed + ', ' + convertSpeed() + ' kts '}<b>{weatherData.windDirection}</b><br />
-                    <b>Forecast</b>: {weatherData.detailedForecast} <br /><br />
-                    Updated: {dateOfUpdate}</p>
+                    <b>Forecast</b>: {weatherData.detailedForecast} <br />
+                    <p>Updated: {dateOfUpdate}</p></p>
             </div>
             <div id="positioning">
                 <p><b>Reporting Position</b>:{' ' + latlon.lat + ', ' + latlon.lon}</p>
