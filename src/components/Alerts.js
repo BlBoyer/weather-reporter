@@ -40,8 +40,8 @@ function Alerts({ zone }) {
     //dependency was alert, it should be whichever main function gets the data, in this case the var that we will pass down
 
     return (
-        <footer id="footer"><h2><u>Latest weather alert</u></h2>
-            <p>{(alert.length<=1) ? alert.slice(-1) : alert[1]}</p>Last Updated Nov, 2021</footer>
+        <div id="alert-div"><h2><u>Latest weather alert</u></h2>
+            <p>{(alert.length<=1) ? alert.slice(-1) : alert[1]}</p><footer>Last Updated Nov, 2021</footer></div>
     )
 }
 export default Alerts;

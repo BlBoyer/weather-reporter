@@ -19,7 +19,10 @@ export default function App() {
     //const [latlon, setLatlon] = useState({ lat: 46.832, lon: -122.538 });
     const [latlon, setLatlon] = useState({});
     const [update, setUpdate] = useState(0);
-    const [intDelay, setIntDelay] = useState(7000);
+    const SECS = 1000;
+    //const MINS = 60000;
+    const HRS = 3600000;
+    const [intDelay, setIntDelay] = useState(SECS*7);
     const [isActive, setIsActive] = useState(true);
     const Refresh = () => setIsActive(true);
     const generateReport = () => {
@@ -49,6 +52,7 @@ export default function App() {
             clearInterval(interval);
         }
         return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isActive, update]);
 
     useEffect(() => {
@@ -64,6 +68,7 @@ export default function App() {
         if (isActive) {
             getPos();
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [update]);
 
     useEffect(() => {
@@ -84,11 +89,11 @@ export default function App() {
                 if (result.status) {
                     console.log(result.status + ' ' + result.detail);
                     console.log('call other area if status == bad area');
-                    //reset update interval
-                    setIntDelay(7000);
+                    //reset update interval to 1 hour
+                    setIntDelay(HRS);
                 }
                 else if (result) {
-                    setIntDelay(7000);
+                    setIntDelay(SECS*7);
                     let forecastUrl = result.properties.forecast;
                     if (forecastUrl) {
                         setWeather_zone(result.properties.forecastZone);
@@ -104,14 +109,18 @@ export default function App() {
                                 for (let ind in periods) {
                                     let period = periods[ind];
                                     let periodTime = [period.startTime, period.endTime];
-                                    /*if today and generated report occur on same date, the period is the same day,
-                                     and the current time is equal to or later than the period start time*/
+                                    /*
+                                     * if today and generated report occur on same date, UTC then the period is the same day,
+                                     * reportTime is UTC
+                                     * and the current day is equal to or later than the period start time(convert)
+                                     * and the hours are the same as the report hours
+                                     */
                                     if (
                                         currentTime.toISOString().slice(0, 10) === reportTime.slice(0, 10) &&
-                                        currentTime.toISOString().slice(8, 10) === periodTime[0].slice(8, 10) &&
+                                        currentTime.toISOString().slice(8,10) === new Date(periodTime[0].slice(0,-6)).toISOString().slice(8, 10) &&
                                         currentTime.getHours() >= periodTime[0].slice(11, 13)
                                     ) {
-                                        //console.log('Report was generated ' + (currentTime.toISOString().slice(11, 13) - reportTime.slice(11, 13)) + ' hour(s) ' + (currentTime.toISOString().slice(14, 16) - reportTime.slice(14, 16)) +' minutes ago.');
+                                        //console.log('Report was generated within ' + (currentTime.toISOString().slice(11, 13) - reportTime.slice(11, 13)) + ' hour(s) ago');
                                         setWeather_data(period);
                                         //remember that the state won't auto-update which is why we want variables here
                                         //break;
@@ -119,13 +128,13 @@ export default function App() {
                                 }
                             }
                             checkTimes();
-                            //console.log('report time: ' + reportTime.slice(0, 16) + ' current time: ' + currentTime.toISOString().slice(0, 16));
                         }
                     }
                 }
             }
             api();
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [update, isActive]);     //the dependecy was weather_data, we want to limit the calls and this was too constantly changing
 
 

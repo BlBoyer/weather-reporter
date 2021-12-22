@@ -68,12 +68,27 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+button {
+    background-color: dodgerblue;
+    border: 1px solid black;
+    border-radius: 2px / 10%;
+}
+    button:hover {
+        transition-timing-function: ease-out;
+        transition-duration:.5s;
+        background-color: snow;
+        font-size: .8em;
+        font-family: 'Trebuchet MS';
+        border: 1px solid snow;
+        border-radius: 2px / 20%;
+        box-shadow: rgba(20,50,97, .8) 0px 0px 15px 1px inset;
+    }
 #template {
     grid-area:template;
     width: 50vw;
     min-width:540px;
     float:right;
-    margin-right:80px;
+    margin:0px 80px 0px 170px; /*we could make this a var value based on the infobar width*/
     display: grid;
     grid-template-columns: .9fr;
     grid-template-rows: 10px auto auto auto auto 10px;
@@ -91,8 +106,9 @@ code {
 /*use text-align:center; for aligning text as seen in template, this eliminates the need to do it in each component*/
 #info-bar {
     grid-area:info-bar;
+    position:fixed;
     max-width:50vw;
-    margin-left:80px;
+    margin-left:60px;
     float:left;
     color:rgb(20,60,187);
     font-size:20px;
@@ -139,7 +155,7 @@ code {
     box-shadow: rgba(0,0,0,.8) 2px 2px 5px 5px;
     border-radius: 20px / 7%;
 }
-    #text-report > p > p {
+    #text-report > p:nth-child(2n+2) {
         color:darkred;
         font-style:italic;
     }
@@ -156,7 +172,7 @@ code {
 }
 #positioning {
 }
-#sidebar {
+#wx-window {
     max-width:50%;
     float:left;
 }
@@ -166,11 +182,13 @@ code {
     margin: 10px 10px;
     border-radius: 60px / 40%;
 }
-#footer {
+#alert-div {
     grid-area: footer;
     box-shadow: rgba(0,0,0,.8) 0px 0px 20px 5px inset;
     border-radius: 30px / 18%;
     background-color: dodgerblue;
     color: snow;
     padding: 5px 15px 7px 15px;
+}
+#footer {
 }

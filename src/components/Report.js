@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Sidebar from '../components/sidebar.js';
+import WxWindow from '../components/wx_window.js';
 import loading from '../image_files/loading.gif';
 import rainy from '../image_files/rain.jpg';
 import sunny from '../image_files/sunny.jpg';
@@ -55,15 +55,16 @@ export default function Report({ reportHeader, weatherData, currentPosition, gen
                 }
             }
             imgDiv.style.backgroundImage = 'url(' + img_path + ')';
-            //we cant setIcon to a condition images name and path value here, then pass to sidebar props reducing the extra function
+            //we can setIcon to a condition images name and path value here, then pass to wxwindow props reducing the extra function
             //setIcon(img_path);
         }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [weatherData]);
     //{()=>generator(document.getElementById("coord_input").value)}
     //pull city into text to give a closest location
     return (
         <div id="report">
-            <Sidebar icon={icon} />
+            <WxWindow icon={icon} />
             <div id="text-report">
                 <div id="report-header"><h2>{weatherData.name}</h2><p>{dateOfReport}</p></div>
             <div><img src={weatherData.icon} alt="Icon provided by weather.gov" align="right" width="50px" height="50px" />
@@ -71,8 +72,8 @@ export default function Report({ reportHeader, weatherData, currentPosition, gen
             </div>
                 <p><b>Temperature</b>: {weatherData.temperature}&#186; Fahrenheit, {Math.round((weatherData.temperature - 32) / 1.8)}&#186; Celsius<br />
                     <b>Wind</b>: {'' + weatherData.windSpeed + ', ' + convertSpeed() + ' kts '}<b>{weatherData.windDirection}</b><br />
-                    <b>Forecast</b>: {weatherData.detailedForecast} <br />
-                    <p>Updated: {dateOfUpdate}</p></p>
+                    <b>Forecast</b>: {weatherData.detailedForecast} <br /></p>
+                    <p>Updated: {dateOfUpdate}</p>
             </div>
             <div id="positioning">
                 <p><b>Reporting Position</b>:{' ' + latlon.lat + ', ' + latlon.lon}</p>
