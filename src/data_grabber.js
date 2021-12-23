@@ -1,9 +1,12 @@
 // JavaScript source code
 import React, { useState, useEffect } from 'react';
+import ReactDOM, { render } from 'react-dom';
+//import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Report from './components/Report';
 import Header from './components/Header';
 import Alerts from './components/Alerts';
 import InfoBar from './components/infobar';
+//import { Redirect } from 'react-router';
 
 /*
  * :::::::::::::::::::::API INFORMATION
@@ -19,16 +22,19 @@ export default function App() {
     //const [latlon, setLatlon] = useState({ lat: 46.832, lon: -122.538 });
     const [latlon, setLatlon] = useState({});
     const [update, setUpdate] = useState(0);
-    const SECS = 1000;
+    const SEC = 1000;
     //const MINS = 60000;
-    const HRS = 3600000;
-    const [intDelay, setIntDelay] = useState(SECS*7);
+    //const HR = 3600000;
+    const [intDelay, setIntDelay] = useState(SEC*2.5);
     const [isActive, setIsActive] = useState(true);
-    const Refresh = () => setIsActive(true);
+    const Refresh = () => {
+        setIntDelay(SEC);
+        setIsActive(true);
+    }
     const generateReport = () => {
         setIsActive(false);
         let coords = document.getElementById("coord_input").value;
-        console.log(coords);
+        //console.log(coords);
         if (coords) {
             //get both coordinate values
             let arr = coords.split(",");
@@ -39,6 +45,15 @@ export default function App() {
         } else {
             throw Error("Coordinates must be in (number, number) format.");
         }
+    }
+    const RenderInv = () => {
+        render(
+            <div id="invalid-page">
+                <p>Sorry, the location you've requested is currently unavailable. We are working to fix this.</p>
+                <button onClick={()=>window.location.reload()}>Refresh Position</button>
+            </div>,
+            document.getElementById('root')
+        );
     }
     useEffect(() => {
         let interval = null;
@@ -52,7 +67,7 @@ export default function App() {
             clearInterval(interval);
         }
         return () => clearInterval(interval);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isActive, update]);
 
     useEffect(() => {
@@ -61,21 +76,21 @@ export default function App() {
                 navigator.geolocation.getCurrentPosition((position) => {
                     let latitude = Number(position.coords.latitude.toFixed(3));
                     let longitude = Number(position.coords.longitude.toFixed(3));
-                    setLatlon({ lat:latitude, lon: longitude });
-               });
+                    setLatlon({ lat: latitude, lon: longitude });
+                });
             }
         }
         if (isActive) {
             getPos();
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [update]);
 
     useEffect(() => {
         //eliminate first call with update>0, we can use latlon or update to change this
         if (update > 0) {
             const api = async function fetchData() {
-                console.log('fetching new data ');
+                console.log(`fetching new data for ${latlon.lat} ${latlon.lon}`);
                 //get input coordinates
                 let reference = `https://api.weather.gov/points/${latlon.lat},${latlon.lon}`;
                 let response = await fetch(reference).catch(err => {
@@ -87,25 +102,38 @@ export default function App() {
                     Refresh();
                 });
                 if (result.status) {
+                    //we're going to use a router and change the page to our own out of area page
+                    if (isActive===true) {
+                        setIsActive(false);
+                    }
+                    RenderInv();
                     console.log(result.status + ' ' + result.detail);
                     console.log('call other area if status == bad area');
-                    //reset update interval to 1 hour
-                    setIntDelay(HRS);
+                    /*
+                     * reset update interval to 1 hour
+                     * setIntDelay(HR);
+                     * changeApi fetch call
+                     * */
                 }
                 else if (result) {
-                    setIntDelay(SECS*7);
+                    if (intDelay !== SEC * 7) {
+                        setIntDelay(SEC * 7);
+                    }
                     let forecastUrl = result.properties.forecast;
                     if (forecastUrl) {
                         setWeather_zone(result.properties.forecastZone);
                         let response2 = await fetch(forecastUrl).catch(err => console.log(err));
                         let result2 = await response2.json();
-                        //setWeather_data(result.properties.periods[0]);
+                        /*
+                          setWeather_data(result.properties.periods[0]);
+                          this was problematic due to the dates changing when called
+                        */
                         if (result2) {
                             setReport_data(result2.properties);
                             let currentTime = new Date();
                             let reportTime = result2.properties.generatedAt.slice(0, 16);
                             let periods = result2.properties.periods;
-                            const checkTimes = async () => {
+                            const checkTimes = async() => {
                                 for (let ind in periods) {
                                     let period = periods[ind];
                                     let periodTime = [period.startTime, period.endTime];
@@ -114,13 +142,18 @@ export default function App() {
                                      * reportTime is UTC
                                      * and the current day is equal to or later than the period start time(convert)
                                      * and the hours are the same as the report hours
+                                     * NEED TO VERIFY THAT startTime is earlier than now and endTime is later than now
                                      */
                                     if (
                                         currentTime.toISOString().slice(0, 10) === reportTime.slice(0, 10) &&
-                                        currentTime.toISOString().slice(8,10) === new Date(periodTime[0].slice(0,-6)).toISOString().slice(8, 10) &&
-                                        currentTime.getHours() >= periodTime[0].slice(11, 13)
+                                        Date.now() > Date.parse(periodTime[0]) &&
+                                        Date.now() < Date.parse(periodTime[1])
                                     ) {
+                                        /* OLD
+                                         * currentTime.toISOString().slice(0, 10) === new Date(periodTime[0].slice(0, -6)).toISOString().slice(0, 10) && 
+                                         * currentTime.getHours() >= new Date(periodTime[0].slice(0,-6)).toISOString().slice(11, 13)*/
                                         //console.log('Report was generated within ' + (currentTime.toISOString().slice(11, 13) - reportTime.slice(11, 13)) + ' hour(s) ago');
+                                        console.log(periodTime);
                                         setWeather_data(period);
                                         //remember that the state won't auto-update which is why we want variables here
                                         //break;
@@ -134,22 +167,17 @@ export default function App() {
             }
             api();
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [update, isActive]);     //the dependecy was weather_data, we want to limit the calls and this was too constantly changing
 
-
-    //change latlon useEffect on click to get report, so onClick itself will set a boolean in it's function and update the latlon obj
-    //at this point interval will be paused and timed updates should stop until reverted to myLocation
-    //add infoBar
-
     return (
-        <div>
-            <InfoBar />
-        <div id="template">
-                <Header />
-                <Report reportHeader={report_data} weatherData={weather_data} currentPosition={latlon} generator={generateReport} refresher={Refresh} />
-                <Alerts zone={weather_zone} />
+            <div>
+                <InfoBar />
+                <div id="template">
+                    <Header />
+                    <Report reportHeader={report_data} weatherData={weather_data} currentPosition={latlon} generator={generateReport} refresher={Refresh} />
+                    <Alerts zone={weather_zone} />
+                </div>
             </div>
-            </div>
-        );
+    );
 }

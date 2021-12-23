@@ -1,8 +1,3 @@
-// JavaScript source code
-/*IMPORTANT NOTE:
- * Because useeffect is based on the api call, you don't have to use didMount, 
- * but if the component may update on another effector, component mount must be verified
- */
 import { useEffect, useState } from 'react';
 //import { zone } from './Report.js';
 //we're going to make  a list of reports that we can select to populate the alert paragraph which means we need to show the [0] report if it exists
@@ -27,7 +22,7 @@ function Alerts({ zone }) {
                 if (data.features) {
                     let alerts = data.features;
                     for (let i in alerts) {
-                        //if (alerts[i].properties.affectedZones.includes({zone}))
+                        //if (alerts[i].properties.affectedZones.includes({zone})) -this is used when getting repts from state area
                         let message = alerts[i].properties;
                         areaAlerts.push(message.headline+': '+message.description);
                     }

@@ -36,3 +36,5 @@ my error handling isn't working, might need to make a dedicated function to proc
 Invalid DOM nesting <p> cannot appear as descendant of <p>
 -this happens when a tag of one type is trying to be set twice, i.e. <p><p>Text</p><p>
 
+invalid isn't changing in render method even though the state updates, consider using it as a property that can't bee seen,
+or organize router to see diff pages, this may be the most useful in order to display other props such as the 3-day rep.

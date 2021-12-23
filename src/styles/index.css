@@ -52,21 +52,15 @@
         transform: rotate(360deg);
     }
 }
-*/
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;*/
+code {
+    font-family: monospace;
+}
 body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    font-family: 'Segoe UI Emoji';
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    display:grid;
-    grid-template-columns:auto auto;
-    grid-template-rows:auto;
-    grid-template-areas:"info-bar template";
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
 }
 button {
     background-color: dodgerblue;
@@ -83,6 +77,12 @@ button {
         border-radius: 2px / 20%;
         box-shadow: rgba(20,50,97, .8) 0px 0px 15px 1px inset;
     }
+#app {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto;
+    grid-template-areas: "info-bar template";
+}
 #template {
     grid-area:template;
     width: 50vw;
@@ -115,7 +115,6 @@ button {
 }
     #info-bar p {
         background-color: lightgray;
-        font-family: 'Segoe UI Emoji';
         border: 5px groove gray;
         box-shadow: rgba(0,0,0,.8) 2px 2px 5px 5px;
         border-radius: 10px / 20%;
@@ -140,7 +139,6 @@ button {
     grid-area: report;
     min-width:490px;
     background-color: lightgray;
-    font-family: 'Segoe UI Emoji';
     padding: 5px;
     box-shadow: rgba(0,0,0,.8) 0px 0px 20px 5px inset;
     border-radius: 30px / 8%;
@@ -170,8 +168,6 @@ button {
     background-color:dodgerblue;
 
 }
-#positioning {
-}
 #wx-window {
     max-width:50%;
     float:left;
@@ -184,11 +180,18 @@ button {
 }
 #alert-div {
     grid-area: footer;
+    padding: 5px 15px 7px 15px;
     box-shadow: rgba(0,0,0,.8) 0px 0px 20px 5px inset;
     border-radius: 30px / 18%;
     background-color: dodgerblue;
+    font-family: sans-serif;
     color: snow;
-    padding: 5px 15px 7px 15px;
 }
 #footer {
+}
+#invalid-page {
+    color: darkred;
+    background-color:gray;
+    font-style: italic;
+    text-align:center;
 }

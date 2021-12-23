@@ -30,7 +30,7 @@ export default function Report({ reportHeader, weatherData, currentPosition, gen
         if (weatherData.windSpeed) {
             let windNums = weatherData.windSpeed.split(' ').filter((i) => parseInt(i))
             for (let i in windNums) {
-                windArr.push(windNums[i] * 0.86897624.toPrecision(1));
+                windArr.push(parseFloat(windNums[i] * 0.86897624).toFixed(1));
             }
             return windArr.join(' to ')
         } else {
@@ -48,15 +48,13 @@ export default function Report({ reportHeader, weatherData, currentPosition, gen
                 let word = Object.keys(conditionImages)[key];
                 let condition = new RegExp(word, 'ig');
                 if (weatherData.shortForecast.match(condition)) {
-                    img_path = conditionImages[word]; //whatever the last match is
+                    img_path = conditionImages[word]; //whatever the last match is, we could alter later for spec
                     let iconOb = {};
                     iconOb[word] = img_path;
                     setIcon(iconOb);
                 }
             }
             imgDiv.style.backgroundImage = 'url(' + img_path + ')';
-            //we can setIcon to a condition images name and path value here, then pass to wxwindow props reducing the extra function
-            //setIcon(img_path);
         }
     //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [weatherData]);
@@ -71,7 +69,7 @@ export default function Report({ reportHeader, weatherData, currentPosition, gen
                 <b><i>{weatherData.shortForecast}</i></b>
             </div>
                 <p><b>Temperature</b>: {weatherData.temperature}&#186; Fahrenheit, {Math.round((weatherData.temperature - 32) / 1.8)}&#186; Celsius<br />
-                    <b>Wind</b>: {'' + weatherData.windSpeed + ', ' + convertSpeed() + ' kts '}<b>{weatherData.windDirection}</b><br />
+                    <b>Wind</b>: {'' + weatherData.windSpeed + ', ' + convertSpeed() + ' kts '}<b><i>{weatherData.windDirection}</i></b><br />
                     <b>Forecast</b>: {weatherData.detailedForecast} <br /></p>
                     <p>Updated: {dateOfUpdate}</p>
             </div>
