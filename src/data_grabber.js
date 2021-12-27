@@ -1,6 +1,6 @@
 // JavaScript source code
 import React, { useState, useEffect } from 'react';
-import ReactDOM, { render } from 'react-dom';
+import { render } from 'react-dom';
 //import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Report from './components/Report';
 import Header from './components/Header';
@@ -21,11 +21,12 @@ export default function App() {
     const [weather_zone, setWeather_zone] = useState('');
     //const [latlon, setLatlon] = useState({ lat: 46.832, lon: -122.538 });
     const [latlon, setLatlon] = useState({});
+    const [quake_data, setQuake_data] = useState([]);
     const [update, setUpdate] = useState(0);
     const SEC = 1000;
-    //const MINS = 60000;
+    const MIN = 60000;
     //const HR = 3600000;
-    const [intDelay, setIntDelay] = useState(SEC*2.5);
+    const [intDelay, setIntDelay] = useState(SEC * 3);
     const [isActive, setIsActive] = useState(true);
     const Refresh = () => {
         setIntDelay(SEC);
@@ -35,22 +36,26 @@ export default function App() {
         setIsActive(false);
         let coords = document.getElementById("coord_input").value;
         //console.log(coords);
-        if (coords) {
+        let coordPx = /-*\d{1,2}(\.\d+)?,\s*-*\d{1,3}(\.\d+)?/;
+        try {
+            //force regex pattern on sring to be sure it doesn't have extra digits
+            coords = coords.match(coordPx)[0];
             //get both coordinate values
             let arr = coords.split(",");
             //make input coordinates float values with 3 decimal place precision
             let latitude = Number(parseFloat(arr[0]).toFixed(3));
             let longitude = Number(parseFloat(arr[1]).toFixed(3));
             setLatlon({ lat: latitude, lon: longitude });
-        } else {
-            throw Error("Coordinates must be in (number, number) format.");
+        } catch (err) {
+            //update invalid div with this error text, need errorText state
+            throw Error("Incorrect input. Format must be latitude number, longitude number");
         }
     }
     const RenderInv = () => {
         render(
             <div id="invalid-page">
                 <p>Sorry, the location you've requested is currently unavailable. We are working to fix this.</p>
-                <button onClick={()=>window.location.reload()}>Refresh Position</button>
+                <button onClick={() => window.location.reload()}>Refresh Position</button>
             </div>,
             document.getElementById('root')
         );
@@ -88,6 +93,7 @@ export default function App() {
 
     useEffect(() => {
         //eliminate first call with update>0, we can use latlon or update to change this
+        //latlon is defined
         if (update > 0) {
             const api = async function fetchData() {
                 console.log(`fetching new data for ${latlon.lat} ${latlon.lon}`);
@@ -103,7 +109,7 @@ export default function App() {
                 });
                 if (result.status) {
                     //we're going to use a router and change the page to our own out of area page
-                    if (isActive===true) {
+                    if (isActive === true) {
                         setIsActive(false);
                     }
                     RenderInv();
@@ -133,7 +139,7 @@ export default function App() {
                             let currentTime = new Date();
                             let reportTime = result2.properties.generatedAt.slice(0, 16);
                             let periods = result2.properties.periods;
-                            const checkTimes = async() => {
+                            const checkTimes = async () => {
                                 for (let ind in periods) {
                                     let period = periods[ind];
                                     let periodTime = [period.startTime, period.endTime];
@@ -166,13 +172,57 @@ export default function App() {
                 }
             }
             api();
+            //if quakedata is set && update % (MIN * 10) / intDelay === 1 -will check every intDelay and once update has gone by x sec update
+            if (quake_data==0 || (update > update * ((MIN * 10) / intDelay) && update % (MIN * 10) / intDelay === 0)) {
+                const quakeApi = async function () {
+                    let quakeQuery = await fetch(`https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=NOW-1days&latitude=${latlon.lat}&longitude=${latlon.lon}&maxradius=30&minmagnitude=3.0`);
+                    let quakeResp = await quakeQuery.json();
+                    let metaData = quakeResp.metadata;
+                    let quakeArr = [];
+                    if (metaData.count > 0) {
+                        //features is an array of reports, even when limit is one
+                        //set quakeInfo(state)
+                        let quakes = quakeResp.features;
+                        //30 miles for 3.0, 300mi for 5.0, and 1000 mi for anything above 7 or alternatively any red flag quakes
+                        quakes.forEach(quake => {
+                            let props = quake.properties;
+                            let mag = props.mag;
+                            let coords = quake.geometry.coordinates;
+                            //light quakes within 120mi maxradius=2&minmagnitude=3.0&maxmagnitude=4.2
+                            if (mag > 3.0 && mag < 4.2) {
+                                if (Math.abs(coords[0] - latlon.lon) <= 2 && Math.abs(coords[1] - latlon.lat) <= 2) {
+                                    quakeArr.push(props);
+                                }
+                            }
+                            //maxradius=5&minmagnitude=4.2&maxmagnitude=5.5
+                            else if (mag >= 4.2 && mag < 5.5) {
+                                if (Math.abs(coords[0] - latlon.lon) <= 5 && Math.abs(coords[1] - latlon.lat) <= 5) {
+                                    quakeArr.push(props);
+                                }
+                            }
+                            //maxradius=10&minmagnitude=5.5
+                            else if (mag >= 5.5) {
+                                if (Math.abs(coords[0] - latlon.lon) <= 10 && Math.abs(coords[1] - latlon.lat) <= 10) {
+                                    quakeArr.push(props);
+                                }
+                            }
+                            //large quakes within 1200 mi maxradius=20&alertlevel=red, your max radius is defined in fetch, not needed here
+                            else if (props.alert === 'red') {
+                                quakeArr.push(props);
+                            }
+                        });
+                        setQuake_data(quakeArr);
+                    }
+                }
+                quakeApi();
+            }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [update, isActive]);     //the dependecy was weather_data, we want to limit the calls and this was too constantly changing
 
     return (
             <div>
-                <InfoBar />
+            <InfoBar quakeData={quake_data} />
                 <div id="template">
                     <Header />
                     <Report reportHeader={report_data} weatherData={weather_data} currentPosition={latlon} generator={generateReport} refresher={Refresh} />

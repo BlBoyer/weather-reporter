@@ -77,6 +77,8 @@ button {
         border-radius: 2px / 20%;
         box-shadow: rgba(20,50,97, .8) 0px 0px 15px 1px inset;
     }
+#root {
+}
 #app {
     display: grid;
     grid-template-columns: auto auto;
@@ -108,13 +110,24 @@ button {
     grid-area:info-bar;
     position:fixed;
     max-width:50vw;
+    margin-top:20px;
     margin-left:60px;
     float:left;
     color:rgb(20,60,187);
     font-size:20px;
 }
-    #info-bar p {
+    #info-bar div {
+        max-width: 170px;
         background-color: lightgray;
+        border: 5px groove gray;
+        box-shadow: rgba(0,0,0,.8) 2px 2px 5px 5px;
+        border-radius: 10px / 20%;
+    }
+    #info-bar p {
+        font-family:sans-serif;
+        /*max-width:165px;*/
+        font-size:12px;
+        color:black;
         border: 5px groove gray;
         box-shadow: rgba(0,0,0,.8) 2px 2px 5px 5px;
         border-radius: 10px / 20%;
@@ -190,8 +203,11 @@ button {
 #footer {
 }
 #invalid-page {
+    min-width: 300px;
+    max-width: 60vw;
+    margin: 20vh auto auto auto;
     color: darkred;
-    background-color:gray;
+    background-color: gray;
     font-style: italic;
-    text-align:center;
+    text-align: center;
 }
