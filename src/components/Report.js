@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import WxWindow from '../components/wx_window.js';
-import loading from '../image_files/loading.gif';
+import loading from '../image_files/load_layered.gif';
 import rainy from '../image_files/rain.jpg';
 import sunny from '../image_files/sunny.jpg';
 import stormy from '../image_files/stormy.jpg';
@@ -13,8 +13,13 @@ export default function Report({ reportHeader, weatherData, currentPosition, gen
     const genReport = () => generator;
     const refresh = () => refresher;
     let latlon = currentPosition;
-    let dateOfUpdate = new Date(reportHeader.updated).toLocaleString();
-    let dateOfReport = new Date(weatherData.startTime).toDateString();
+    //these should be set after update
+    let dateOfUpdate;
+    let dateOfReport;
+    if (reportHeader !== 0) {
+        dateOfUpdate = new Date(reportHeader.updated).toLocaleString();
+        dateOfReport = new Date(weatherData.startTime).toDateString();
+    }
     const conditionImages = {
         'rain': rainy,
         'sun': sunny,

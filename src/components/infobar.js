@@ -14,21 +14,23 @@ export default function InfoBar({ quakeData, threeDay }) {
       "tsunami": 0,*/
     const [popCount, setPopCount] = useState(1);
     const [buttonText, setButtonText] = useState('Populate');
-    let quakesP = "";
+    //let quakesP = "";
+    let quakeArr = ["There are no earthquakes of concern for the current position."];
     if (quakeData.length > 0) {
         quakeData.forEach(rep => {
-            quakesP += `Magnitude ${rep.mag.toString()} quake, ${rep.place.toString()}`
+            //quakesP += `Magnitude ${rep.mag} quake, ${rep.place}, ${new Date(rep.time).toLocaleString()} | `;
+            quakeArr.push(`Magnitude ${rep.mag} quake, ${rep.place}, ${new Date(rep.time).toLocaleString()}`);
         });
-    } else {
+    } /*else {
         quakesP += "There are no earthquakes of concern for the current position.";
-    }
+    }*/
     let rep3 = ["No reports yet."];
     if (threeDay) {
         let repStr = "";
         threeDay.forEach(day => {
-            repStr += day.name + '|' + day.temperature +'\xB0'+ day.temperatureUnit + '- ' + day.shortForecast + '|';
+            repStr += day.name + '|' + day.temperature +'\xB0'+ day.temperatureUnit + ' -' + day.shortForecast + '|';
         });
-        rep3 = repStr.split('|');
+        rep3 = repStr.split('|').slice(0,-1);
     }
     //maybe try a forEach here and put it all inside one p, adding a break after every line, or make seperate string vars
     //if we want to change the paragraphing format
@@ -43,7 +45,10 @@ export default function InfoBar({ quakeData, threeDay }) {
         render(
             (popCount % 2 > 0) ?
                 <div>Geological Events
-                    <p style={{ marginTop: "2px" }}>{quakesP}</p>
+                    <div style={{ marginTop: "2px" }}>{quakeArr.slice(1,).map(
+                        (ev, index) =>
+                            <p key={index}>{ev}</p>
+                    )}</div>
                 </div> : <div>Geological Events</div>
             , document.getElementById('quake-div')
         );
@@ -60,7 +65,7 @@ export default function InfoBar({ quakeData, threeDay }) {
             , document.getElementById('three-day')
         );
     }
-
+    //the infobar div with placeholders
     return (
         <div id="info-bar">
             <div id="quake-div">Geological Events</div>

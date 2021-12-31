@@ -158,8 +158,6 @@ export default function App() {
                                         console.log(periodTime);
                                         setWeather_data(period);
                                         setThree_day(periods.slice(period.number, period.number+6));
-                                        //remember that the state won't auto-update which is why we want variables here
-                                        //break;
                                     }
                                 }
                             }
@@ -172,7 +170,7 @@ export default function App() {
             //if quakedata is set || update = one hour of 7 sec updates (85)
             if (quake_data==0 || update % Math.floor(MIN * 10 / intDelay) === 0) {
                 const quakeApi = async function () {
-                    let quakeQuery = await fetch(`https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=NOW-1days&latitude=${latlon.lat}&longitude=${latlon.lon}&maxradius=30&minmagnitude=3.0`);
+                    let quakeQuery = await fetch(`https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=NOW-30days&latitude=${latlon.lat}&longitude=${latlon.lon}&maxradius=30&minmagnitude=3.0`);
                     let quakeResp = await quakeQuery.json();
                     let metaData = quakeResp.metadata;
                     let quakeArr = [];
