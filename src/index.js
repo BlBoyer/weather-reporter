@@ -1,17 +1,13 @@
-//import React, { useState, useEffect} from 'react';
 import ReactDOM from 'react-dom';
 import './styles/index.css';
-import Loading from './components/loader';
 import App from './data_grabber';
 import reportWebVitals from './reportWebVitals';
-let loading = false;
 
 //Your div with id template needs to get all the info variables and pass them down instead of being in report
-
+//render your router here and app to one location, the in app switch the route an put the link to in invalid
 ReactDOM.render(
-    (loading)?<Loading /> :
         <App />,
-    document.getElementById('root')
+    document.getElementById('app')
 );
     
     // If you want to start measuring performance in your app, pass a function
