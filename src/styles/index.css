@@ -117,20 +117,36 @@ button {
     font-size:20px;
 }
     #info-bar div {
-        max-width: 170px;
+        max-width: 165px;
         background-color: lightgray;
+            /*
         border: 5px groove gray;
         box-shadow: rgba(0,0,0,.8) 2px 2px 5px 5px;
-        border-radius: 10px / 20%;
+        border-radius: 7px / 2%;*/
     }
     #info-bar p {
         font-family:sans-serif;
         /*max-width:165px;*/
-        font-size:12px;
+        font-size:14px;
         color:black;
-        border: 5px groove gray;
+        /*border: 5px groove gray;
         box-shadow: rgba(0,0,0,.8) 2px 2px 5px 5px;
         border-radius: 10px / 20%;
+        */
+    }
+#quake-div {
+    border: 9px groove gray;
+    box-shadow: rgba(0,0,0,.8) 2px 2px 5px 5px;
+    border-radius: 10px / 8%;
+}
+#three-day {
+    border: 9px groove gray;
+    box-shadow: rgba(0,0,0,.8) 2px 2px 5px 5px;
+    border-radius: 12px / 5%;
+}
+    #three-day p {
+        margin-top:4px;
+        margin-bottom:4px;
     }
 #loading-div {
     height:100vh;

@@ -18,6 +18,7 @@ import InfoBar from './components/infobar';
 export default function App() {
     const [report_data, setReport_data] = useState({});
     const [weather_data, setWeather_data] = useState({});
+    const [three_day, setThree_day] = useState([]);
     const [weather_zone, setWeather_zone] = useState('');
     //const [latlon, setLatlon] = useState({ lat: 46.832, lon: -122.538 });
     const [latlon, setLatlon] = useState({});
@@ -101,11 +102,9 @@ export default function App() {
                 let reference = `https://api.weather.gov/points/${latlon.lat},${latlon.lon}`;
                 let response = await fetch(reference).catch(err => {
                     console.log(err);
-                    Refresh();
                 });
                 let result = await response.json().catch(err => {
                     console.log(err);
-                    Refresh();
                 });
                 if (result.status) {
                     //we're going to use a router and change the page to our own out of area page
@@ -114,7 +113,6 @@ export default function App() {
                     }
                     RenderInv();
                     console.log(result.status + ' ' + result.detail);
-                    console.log('call other area if status == bad area');
                     /*
                      * reset update interval to 1 hour
                      * setIntDelay(HR);
@@ -137,6 +135,7 @@ export default function App() {
                         if (result2) {
                             setReport_data(result2.properties);
                             let currentTime = new Date();
+                            //don't use state var until updated
                             let reportTime = result2.properties.generatedAt.slice(0, 16);
                             let periods = result2.properties.periods;
                             const checkTimes = async () => {
@@ -155,12 +154,10 @@ export default function App() {
                                         Date.now() > Date.parse(periodTime[0]) &&
                                         Date.now() < Date.parse(periodTime[1])
                                     ) {
-                                        /* OLD
-                                         * currentTime.toISOString().slice(0, 10) === new Date(periodTime[0].slice(0, -6)).toISOString().slice(0, 10) && 
-                                         * currentTime.getHours() >= new Date(periodTime[0].slice(0,-6)).toISOString().slice(11, 13)*/
                                         //console.log('Report was generated within ' + (currentTime.toISOString().slice(11, 13) - reportTime.slice(11, 13)) + ' hour(s) ago');
                                         console.log(periodTime);
                                         setWeather_data(period);
+                                        setThree_day(periods.slice(period.number, period.number+6));
                                         //remember that the state won't auto-update which is why we want variables here
                                         //break;
                                     }
@@ -172,8 +169,8 @@ export default function App() {
                 }
             }
             api();
-            //if quakedata is set && update % (MIN * 10) / intDelay === 1 -will check every intDelay and once update has gone by x sec update
-            if (quake_data==0 || (update > update * ((MIN * 10) / intDelay) && update % (MIN * 10) / intDelay === 0)) {
+            //if quakedata is set || update = one hour of 7 sec updates (85)
+            if (quake_data==0 || update % Math.floor(MIN * 10 / intDelay) === 0) {
                 const quakeApi = async function () {
                     let quakeQuery = await fetch(`https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=NOW-1days&latitude=${latlon.lat}&longitude=${latlon.lon}&maxradius=30&minmagnitude=3.0`);
                     let quakeResp = await quakeQuery.json();
@@ -221,8 +218,8 @@ export default function App() {
     }, [update, isActive]);     //the dependecy was weather_data, we want to limit the calls and this was too constantly changing
 
     return (
-            <div>
-            <InfoBar quakeData={quake_data} />
+        <div>
+            <InfoBar quakeData={quake_data} threeDay={three_day} update={update} />
                 <div id="template">
                     <Header />
                     <Report reportHeader={report_data} weatherData={weather_data} currentPosition={latlon} generator={generateReport} refresher={Refresh} />
