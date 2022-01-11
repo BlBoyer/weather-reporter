@@ -8,7 +8,6 @@ import cloudy from '../image_files/cloudy.jpg';
 import snowy from '../image_files/snowy.jpg';
 
 export default function Report({ reportHeader, weatherData, currentPosition, generator, refresher }) {
-    //change weather data based on onClick from get report
     //declarations
     const genReport = () => generator;
     const refresh = () => refresher;
@@ -47,13 +46,12 @@ export default function Report({ reportHeader, weatherData, currentPosition, gen
         if (weatherData.shortForecast) {
             var imgDiv = document.getElementById('template');
             let img_path;
-            //keyWord = weather_data.shortForecast.split(' ').filter((i) => conditions.includes(i.toLowerCase()));
             //Determine Short Forecast Condition
             for (let key in Object.keys(conditionImages)) {
                 let word = Object.keys(conditionImages)[key];
                 let condition = new RegExp(word, 'ig');
                 if (weatherData.shortForecast.match(condition)) {
-                    img_path = conditionImages[word]; //whatever the last match is, we could alter later for spec
+                    img_path = conditionImages[word]; //whatever the last match is, we could alter later for more specificity
                     let iconOb = {};
                     iconOb[word] = img_path;
                     setIcon(iconOb);
@@ -63,7 +61,7 @@ export default function Report({ reportHeader, weatherData, currentPosition, gen
         }
     //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [weatherData]);
-    //{()=>generator(document.getElementById("coord_input").value)}
+
     //pull city into text to give a closest location
     return (
         <div id="report">
@@ -87,4 +85,3 @@ export default function Report({ reportHeader, weatherData, currentPosition, gen
         </div>
     );
 }
-/**/
