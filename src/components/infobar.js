@@ -4,8 +4,6 @@ import { render } from 'react-dom';
 export default function InfoBar({ quakeData, threeDay }) {
     //make populate function here using imported data from data_grabber
     //make variables in grabber: quake_data, three_day, amb_levels
-    //<p>{quakeData[0].place.toString()}</p>
-    //render quake info under 1st p child of the comp
     /*"mag": 3.6,
       "place": "12 km ENE of Ganges, Canada",
       "time": 1639743231663,
@@ -19,7 +17,7 @@ export default function InfoBar({ quakeData, threeDay }) {
     if (quakeData.length > 0) {
         quakeData.forEach(rep => {
             //quakesP += `Magnitude ${rep.mag} quake, ${rep.place}, ${new Date(rep.time).toLocaleString()} | `;
-            quakeArr.push(`Magnitude ${rep.mag} quake, ${rep.place}, ${new Date(rep.time).toLocaleString()}`);
+            quakeArr.push(` ${new Date(rep.time).toLocaleString()}- Magnitude ${rep.mag} earthquake, ${rep.place}`);
         });
     } /*else {
         quakesP += "There are no earthquakes of concern for the current position.";
@@ -34,13 +32,15 @@ export default function InfoBar({ quakeData, threeDay }) {
     }
     //maybe try a forEach here and put it all inside one p, adding a break after every line, or make seperate string vars
     //if we want to change the paragraphing format
+    //call to render subcomponents, we could use variables or button switchest to control what updates if desired
     const renderUpdate = () => {
-        setPopCount(popCount => popCount += 1);
-        renderQuakes();
-        renderThreeDay();
-        (popCount % 2 > 0) ? setButtonText('Hide') : setButtonText('Show');
+        setPopCount(popCount => popCount += 1);                                 //state toggle
+        renderQuakes();                                                         //render function 'a'
+        renderThreeDay();                                                       //render function 'b'
+        (popCount % 2 > 0) ? setButtonText('Hide') : setButtonText('Show');     //controller update
         
     }
+    //we could possibly place subcomponents in their respective div using <subCompName /> and then remove the render positions
     const renderQuakes = () => {
         render(
             (popCount % 2 > 0) ?

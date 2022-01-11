@@ -228,6 +228,8 @@ button {
     margin: 10px 10px;
     border-radius: 60px / 40%;
 }
+#positioning {
+}
 #alert-div {
     grid-area: footer;
     padding: 5px 15px 7px 15px;

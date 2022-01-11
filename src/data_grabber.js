@@ -168,9 +168,9 @@ export default function App() {
             }
             api();
             //if quakedata is set || update = one hour of 7 sec updates (85)
-            if (quake_data==0 || update % Math.floor(MIN * 10 / intDelay) === 0) {
+            if (quake_data==0 || update % Math.floor(MIN * 60 / intDelay) === 0) {
                 const quakeApi = async function () {
-                    let quakeQuery = await fetch(`https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=NOW-30days&latitude=${latlon.lat}&longitude=${latlon.lon}&maxradius=30&minmagnitude=3.0`);
+                    let quakeQuery = await fetch(`https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=NOW-7days&latitude=${latlon.lat}&longitude=${latlon.lon}&maxradius=30&minmagnitude=3.0`);
                     let quakeResp = await quakeQuery.json();
                     let metaData = quakeResp.metadata;
                     let quakeArr = [];
@@ -189,19 +189,19 @@ export default function App() {
                                     quakeArr.push(props);
                                 }
                             }
-                            //maxradius=5&minmagnitude=4.2&maxmagnitude=5.5
+                            //more sig quakes within 300mi maxradius=5&minmagnitude=4.2&maxmagnitude=5.5
                             else if (mag >= 4.2 && mag < 5.5) {
                                 if (Math.abs(coords[0] - latlon.lon) <= 5 && Math.abs(coords[1] - latlon.lat) <= 5) {
                                     quakeArr.push(props);
                                 }
                             }
-                            //maxradius=10&minmagnitude=5.5
+                            //strong quakes withn 600mi maxradius=10&minmagnitude=5.5
                             else if (mag >= 5.5) {
                                 if (Math.abs(coords[0] - latlon.lon) <= 10 && Math.abs(coords[1] - latlon.lat) <= 10) {
                                     quakeArr.push(props);
                                 }
                             }
-                            //large quakes within 1200 mi maxradius=20&alertlevel=red, your max radius is defined in fetch, not needed here
+                            //large quakes within 1800mi alertlevel=red, your max radius is defined in fetch, not needed here
                             else if (props.alert === 'red') {
                                 quakeArr.push(props);
                             }
@@ -213,7 +213,7 @@ export default function App() {
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [update, isActive]);     //the dependecy was weather_data, we want to limit the calls and this was too constantly changing
+    }, [update, isActive]);
 
     return (
         <div>
