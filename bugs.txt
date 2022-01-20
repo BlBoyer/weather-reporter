@@ -38,4 +38,18 @@ invalid isn't changing in render method even though the state updates, consider 
 or organize router to see diff pages, this may be the most useful in order to display other props such as the 3-day rep.
 --fix -made a render function to be called on command, appended full page display above the app in DOM
 
+the get forecast can throw error and crash the app
+--fix -made alert instead of the throw
+
+the input for getting a forecast can still pass the regex if given two long numbers bc the last two digits will register as the 2 digits
+--not sure of a good fix fix here, it's sort of irrelevant as the arbitrary input will just return a bad point and the app won't crash.
+ -it still recognizes as a coordinate
+
+ when I get a 404 "not found" response, instead of rendering the invalid location page (which really shouldn't be the one anyway) the app tries to work,
+  -and somehow the zone gets set, but the rest of the app crashes and we get our imgDiv error reading style
+  -this is bc we've got the error on response, but there is no status, therefore the app continues
+  --fix, complete error-handling
+
+  there isn't an icon image for "clear"
+
 

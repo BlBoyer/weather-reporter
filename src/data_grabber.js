@@ -1,20 +1,17 @@
 // JavaScript source code
 import React, { useState, useEffect } from 'react';
 import { render } from 'react-dom';
-//import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Report from './components/Report';
 import Header from './components/Header';
 import Alerts from './components/Alerts';
 import InfoBar from './components/infobar';
-//import { Redirect } from 'react-router';
 
 /*
  * :::::::::::::::::::::API INFORMATION
  * https://www.weather.gov/documentation/services-web-api
  * 
- * get station info from both zone and stations, compare coordinates to current for best info
 */
-//NOTE: if latlon is not set, app will not work. Need to handle errors, besides just presetting the latlon object
+//NOTE: if latlon is not set, app will not work.
 export default function App() {
     const [report_data, setReport_data] = useState({});
     const [weather_data, setWeather_data] = useState({});
@@ -39,7 +36,7 @@ export default function App() {
         //console.log(coords);
         let coordPx = /-*\d{1,2}(\.\d+)?,\s*-*\d{1,3}(\.\d+)?/;
         try {
-            //force regex pattern on sring to be sure it doesn't have extra digits
+            //force regex pattern on string to be sure it doesn't have extra digits
             coords = coords.match(coordPx)[0];
             //get both coordinate values
             let arr = coords.split(",");
@@ -49,7 +46,7 @@ export default function App() {
             setLatlon({ lat: latitude, lon: longitude });
         } catch (err) {
             //update invalid div with this error text, need errorText state
-            throw Error("Incorrect input. Format must be latitude number, longitude number");
+            alert("Incorrect input. Format must be latitude number, longitude number");
         }
     }
     const RenderInv = () => {
@@ -105,9 +102,9 @@ export default function App() {
                 });
                 let result = await response.json().catch(err => {
                     console.log(err);
+                    Refresh();
                 });
                 if (result.status) {
-                    //we're going to use a router and change the page to our own out of area page
                     if (isActive === true) {
                         setIsActive(false);
                     }
@@ -155,7 +152,7 @@ export default function App() {
                                         Date.now() < Date.parse(periodTime[1])
                                     ) {
                                         //console.log('Report was generated within ' + (currentTime.toISOString().slice(11, 13) - reportTime.slice(11, 13)) + ' hour(s) ago');
-                                        console.log(periodTime);
+                                        //console.log(periodTime);
                                         setWeather_data(period);
                                         setThree_day(periods.slice(period.number, period.number+6));
                                     }
@@ -170,6 +167,7 @@ export default function App() {
             //if quakedata is set || update = one hour of 7 sec updates (85)
             if (quake_data==0 || update % Math.floor(MIN * 60 / intDelay) === 0) {
                 const quakeApi = async function () {
+                    //get one week of info for quakes
                     let quakeQuery = await fetch(`https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=NOW-7days&latitude=${latlon.lat}&longitude=${latlon.lon}&maxradius=30&minmagnitude=3.0`);
                     let quakeResp = await quakeQuery.json();
                     let metaData = quakeResp.metadata;
