@@ -46,7 +46,7 @@ export default function App() {
             setLatlon({ lat: latitude, lon: longitude });
         } catch (err) {
             //update invalid div with this error text, need errorText state
-            alert("Incorrect input. Format must be latitude number, longitude number");
+            alert("Incorrect input. Format must be: 'latitude number', 'longitude number'");
         }
     }
     const RenderInv = () => {
@@ -76,10 +76,16 @@ export default function App() {
     useEffect(() => {
         function getPos() {
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition((position) => {
+                navigator.geolocation.getCurrentPosition((position, err, option) => {
+                    if (err){
+                        console.error(err);
+                        alert(err);
+                    } else {
+                    option={maximumAge: 0};
                     let latitude = Number(position.coords.latitude.toFixed(3));
                     let longitude = Number(position.coords.longitude.toFixed(3));
                     setLatlon({ lat: latitude, lon: longitude });
+                    }
                 });
             }
         }
@@ -96,7 +102,8 @@ export default function App() {
             const api = async function fetchData() {
                 console.log(`fetching new data for ${latlon.lat} ${latlon.lon}`);
                 //get input coordinates
-                let reference = `https://api.weather.gov/points/${latlon.lat},${latlon.lon}`;
+                //change to preview api until Feb 2, 2022
+                let reference = `https://preview-api.weather.gov/points/${latlon.lat},${latlon.lon}`;
                 let response = await fetch(reference).catch(err => {
                     console.log(err);
                 });
