@@ -24,7 +24,9 @@ export default function Report({ reportHeader, weatherData, currentPosition, gen
         'sun': sunny,
         'storm': stormy,
         'cloud': cloudy,
-        'snow': snowy
+        'snow': snowy,
+        'clear': sunny,
+        'fog': cloudy
     };
     const [icon, setIcon] = useState({ 'loading': loading });
     let windArr = [];

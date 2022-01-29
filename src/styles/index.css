@@ -11,12 +11,19 @@
     border: 20px ridge gold;
     box-shadow: var(--sun) 0px 0px 12px 6px;
 }
-
+.clear {
+    border: 20px ridge gold;
+    box-shadow: var(--sun) 0px 0px 12px 6px;
+}
 .rain {
     border: 20px ridge cornflowerblue;
     box-shadow: var(--rain) 0px 0px 12px 6px;
 }
 .cloud {
+    border: 20px ridge gray;
+    box-shadow: var(--cloud) 0px 0px 12px 6px;
+}
+.fog {
     border: 20px ridge gray;
     box-shadow: var(--cloud) 0px 0px 12px 6px;
 }
