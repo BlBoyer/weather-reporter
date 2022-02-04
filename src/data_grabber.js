@@ -172,6 +172,7 @@ export default function App() {
             }
             api();
             //if quakedata is set || update = one hour of 7 sec updates (85)
+                        //eslint-disable-next-line eqeqeq
             if (quake_data==0 || update % Math.floor(MIN * 60 / intDelay) === 0) {
                 const quakeApi = async function () {
                     //get one week of info for quakes
