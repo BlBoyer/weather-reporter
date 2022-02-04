@@ -80,9 +80,11 @@ export default function Report({ reportHeader, weatherData, currentPosition, gen
             </div>
             <div id="positioning">
                 <p><b>Reporting Position</b>:{' ' + latlon.lat + ', ' + latlon.lon}</p>
-                <input type="text" id="coord_input" size="40px" />
-                <button onClick={genReport()}>Get Forecast</button>
-                <button onClick={refresh()}>Refresh Position</button>
+                <div>
+                    <input type="text" id="coord_input" size="40px" />
+                    <button onClick={genReport()}>Get Forecast</button>
+                    <button onClick={refresh()}>Refresh Position</button>
+                </div>
             </div>
         </div>
     );
