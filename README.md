@@ -1,8 +1,9 @@
-# `Instructions`:
+# `Instructions`
 
 Once up and running, allow the app location permission. This app only works in locations with data provided by NOAA from the weather.gov api in the U.S. It will automatically get a report and display the data.
 
-To find weather in another area: Find the correct latitude and longitude in positive/negative decimal format, enter it in the input field and click generate report. To return to automatic local reports, click the refresh position button.
+#### To find weather in another area:
+Find the correct latitude and longitude in positive/negative decimal format, enter it in the input field and click generate report. To return to automatic local reports, click the refresh position button.
 
 # Getting Started with Create React App
 
