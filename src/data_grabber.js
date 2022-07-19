@@ -102,8 +102,8 @@ export default function App() {
             const api = async function fetchData() {
                 console.log(`fetching new data for ${latlon.lat} ${latlon.lon}`);
                 //get input coordinates
-                //change to preview api until Feb 2, 2022
-                let reference = `https://preview-api.weather.gov/points/${latlon.lat},${latlon.lon}`;
+                //change to preview-api until Feb 2, 2022
+                let reference = `https://api.weather.gov/points/${latlon.lat},${latlon.lon}`;
                 let response = await fetch(reference).catch(err => {
                     console.log(err);
                 });

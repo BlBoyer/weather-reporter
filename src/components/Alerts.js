@@ -36,7 +36,7 @@ function Alerts({ zone }) {
 
     return (
         <div id="alert-div"><h2><u>Latest weather alert</u></h2>
-            <p>{(alert.length<=1) ? alert.slice(-1) : alert[1]}</p><footer>Last Updated: Jan, 29 2021</footer></div>
+            <p>{(alert.length<=1) ? alert.slice(-1) : alert[1]}</p><footer>Last Updated: July, 19 2022</footer></div>
     )
 }
 export default Alerts;
