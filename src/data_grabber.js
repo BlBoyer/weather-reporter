@@ -17,6 +17,7 @@ export default function App() {
     const [weather_data, setWeather_data] = useState({});
     const [three_day, setThree_day] = useState([]);
     const [weather_zone, setWeather_zone] = useState('');
+    const [town, setTown] = useState('City, State');
     //const [latlon, setLatlon] = useState({ lat: 46.832, lon: -122.538 });
     const [latlon, setLatlon] = useState({});
     const [quake_data, setQuake_data] = useState([]);
@@ -102,7 +103,7 @@ export default function App() {
             const api = async function fetchData() {
                 console.log(`fetching new data for ${latlon.lat} ${latlon.lon}`);
                 //get input coordinates
-                //change to preview-api until Feb 2, 2022
+                //change to preview-api if api is experiences issues
                 let reference = `https://api.weather.gov/points/${latlon.lat},${latlon.lon}`;
                 let response = await fetch(reference).catch(err => {
                     console.log(err);
@@ -128,6 +129,7 @@ export default function App() {
                         setIntDelay(SEC * 7);
                     }
                     let forecastUrl = result.properties.forecast;
+                    setTown(`${result.properties.relativeLocation.properties.city}, ${result.properties.relativeLocation.properties.state}`)
                     if (forecastUrl) {
                         setWeather_zone(result.properties.forecastZone);
                         let response2 = await fetch(forecastUrl).catch(err => console.log(err));
@@ -226,7 +228,7 @@ export default function App() {
             <InfoBar quakeData={quake_data} threeDay={three_day} update={update} />
                 <div id="template">
                     <Header />
-                    <Report reportHeader={report_data} weatherData={weather_data} currentPosition={latlon} generator={generateReport} refresher={Refresh} />
+                    <Report reportHeader={report_data} weatherData={weather_data} currentPosition={latlon} currentLocation={town} generator={generateReport} refresher={Refresh} />
                     <Alerts zone={weather_zone} />
                 </div>
             </div>

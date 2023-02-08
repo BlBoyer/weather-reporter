@@ -7,7 +7,7 @@ import stormy from '../image_files/stormy.jpg';
 import cloudy from '../image_files/cloudy.jpg';
 import snowy from '../image_files/snowy.jpg';
 
-export default function Report({ reportHeader, weatherData, currentPosition, generator, refresher }) {
+export default function Report({ reportHeader, weatherData, currentPosition, currentLocation, generator, refresher }) {
     //declarations
     const genReport = () => generator;
     const refresh = () => refresher;
@@ -79,7 +79,8 @@ export default function Report({ reportHeader, weatherData, currentPosition, gen
                     <p>Updated: {dateOfUpdate}</p>
             </div>
             <div id="positioning">
-                <p><b>Reporting Position</b>:{' ' + latlon.lat + ', ' + latlon.lon}</p>
+                <p><b>Reporting Position</b>:&nbsp;{latlon.lat + ', ' + latlon.lon}<br/>
+                <b>Location</b>:&nbsp;{currentLocation}</p>
                 <div>
                     <input type="text" id="coord_input" size="40px" />
                     <button onClick={genReport()}>Get Forecast</button>
