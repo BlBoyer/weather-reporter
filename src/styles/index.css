@@ -43,6 +43,9 @@
     box-shadow: var(--storm) 0px 0px 12px 6px;
     background-color:black;
 }
+.px-sm {
+    padding: 0em .5em;
+}
 /*elements*/
 /*
 @media (prefers-reduced-motion: no-preference) {

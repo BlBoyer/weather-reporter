@@ -68,8 +68,8 @@ export default function InfoBar({ quakeData, threeDay }) {
     //the infobar div with placeholders
     return (
         <div id="info-bar">
-            <div id="quake-div">Geological Events</div>
-            <div id="three-day">Next Three Days</div>
+            <div id="quake-div" className='px-sm'>Geological Events</div>
+            <div id="three-day" className='px-sm' >Next Three Days</div>
             <button onClick={renderUpdate}>{buttonText}</button>
         </div>
     );
