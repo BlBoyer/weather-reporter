@@ -1,10 +1,6 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 #info
-API_info.txt
-bugs.txt
-forecast-example.txt
-grid-point-data-example.txt
-usgs_api_info.txt
+api/info
 # dependencies
 /node_modules
 /.pnp
