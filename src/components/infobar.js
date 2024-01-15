@@ -17,7 +17,7 @@ export default function InfoBar({ quakeData, threeDay }) {
   if (threeDay) {
     let repStr = '';
     threeDay.forEach(day => {
-      repStr += `${day.name} | ${day.temperature} \xB0 ${day.temperatureUnit} - ${day.shortForecast} |`;
+      repStr += `${day.name} | ${day.temperature}\xB0${day.temperatureUnit} - ${day.shortForecast} |`;
     });
     rep3 = repStr.split('|').slice(0, -1);
   }

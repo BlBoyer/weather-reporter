@@ -178,7 +178,7 @@ export default function App() {
       //eslint-disable-next-line eqeqeq
       if (quake_data == 0 || update % Math.floor((MIN * 60) / intDelay) === 0) {
         const quakeApi = async function () {
-          //get one week of info for quakes
+          //ToDo: extract api, and use state manangement for data updates
           let quakeQuery = await fetch(
             `https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=NOW-7days&latitude=${latlon.lat}&longitude=${latlon.lon}&maxradius=30&minmagnitude=3.0`
           );
@@ -190,7 +190,7 @@ export default function App() {
             //30 miles for 3.0, 300mi for 5.0, and 1000 mi for anything above 7 or alternatively any red flag quakes
             quakes.forEach(quake => {
               let props = quake.properties;
-              let mag = parseFloat(props.mag, 4);
+              let mag = parseFloat(props.mag).toFixed(2);
               let coords = quake.geometry.coordinates;
 
               //light quakes within 120mi maxradius=2&minmagnitude=3.0&maxmagnitude=4.2
